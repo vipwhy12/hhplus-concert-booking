@@ -1,4 +1,3 @@
-import { addUsage } from './../../node_modules/@nestjs/cli/node_modules/webpack/types.d';
 import {
   Body,
   Controller,
@@ -50,6 +49,25 @@ export class ConcertsController {
         sessionId,
         concertName,
         availableSeats,
+      },
+    };
+  }
+
+  // 콘서트 좌석 예약 API (POST 요청)
+  @Post(':concertId/sessions/:sessionId/reservations')
+  reserveSeat(
+    @Param('concertId') concertId: string,
+    @Param('sessionId') sessionId: string,
+    @Body('seatNumber') seatNumber: number,
+    @Headers('WAITING_TOKEN') waitingToken: string,
+  ) {
+    return {
+      statusCode: '200',
+      message: 'success',
+      data: {
+        reservationId: 'resv12345',
+        seatNumber,
+        status: '예약 성공',
       },
     };
   }
