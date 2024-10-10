@@ -1,3 +1,7 @@
+## 6-1. Concert Reservation System ERD
+
+콘서트 예약 시스템의 데이터 모델에 대한 엔터티 관계 다이어그램(ERD)입니다. 이 다이어그램은 유저, 콘서트, 세션, 좌석, 예약, 결제 관련 주요 엔터티와 그들 간의 관계를 표현합니다.
+
 ```mermaid
 erDiagram
     User {
@@ -31,7 +35,7 @@ erDiagram
         bigint id
         DECIMAL amount
         datetime create_at
-        string status        
+        string status
     }
 
     Concert {
@@ -41,23 +45,23 @@ erDiagram
 
     Concert_Session {
       bigint id
-      bigint concert_id   
+      bigint concert_id
       datetime date
       int availableSeats
     }
 
     Seat {
         bigint id
-        bigint concert_session_id   
+        bigint concert_session_id
         int seatNumber
         string status
     }
 
     Reservation{
         bigint id
-        bigint user_id 
+        bigint user_id
         bigint seat_id
-        bigint concert_session_id   
+        bigint concert_session_id
         string status
     }
 
