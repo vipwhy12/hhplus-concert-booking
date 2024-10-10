@@ -72,7 +72,7 @@ export class ConcertsController {
     };
   }
 
-  //콘서트 좌석 예약
+  //콘서트 좌석 결제
   @Post(':concertId/sessions/:sessionId/payments')
   payForReservedSeat(
     @Param('concertId') concertId: string,
