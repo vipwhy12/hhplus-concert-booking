@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { QueuesModule } from './queues/queues.module';
 import { ConcertsModule } from './concerts/concerts.module';
 import { PointsModule } from './points/points.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PointsModule } from './points/points.module';
     QueuesModule,
     ConcertsModule,
     PointsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
