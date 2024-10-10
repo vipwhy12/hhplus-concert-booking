@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { QueuesModule } from './queues/queues.module';
+import { ConcertsModule } from './concerts/concerts.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { QueuesModule } from './queues/queues.module';
       // load: [async () => console.log('test')],
     }),
     QueuesModule,
+    ConcertsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
