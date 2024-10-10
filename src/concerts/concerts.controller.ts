@@ -1,3 +1,4 @@
+import { addUsage } from './../../node_modules/@nestjs/cli/node_modules/webpack/types.d';
 import {
   Body,
   Controller,
@@ -10,26 +11,50 @@ import {
 
 @Controller('concerts')
 export class ConcertsController {
-  @Get(':concertId/sessions/:sessionId/dates/:date')
+  //예약 가능한 날짜 조회
+  @Get(':concertId/dates/:date')
   getAvailableDates(
     @Param('concertId') concertId: string,
-    @Param('sessionId') sessionId: string,
     @Param('date') date: string,
     @Query('status') status: string,
   ) {
     const availableDates = ['2024-05-01', '2024-05-02', '2024-05-03'];
-    const constantsName = '흑백요리사';
+    const concertName = '흑백요리사';
+
     return {
       statusCode: 200,
       message: 'success',
       data: {
         concertId,
-        constantsName,
+        concertName,
         availableDates,
       },
     };
   }
 
+  // 예약 가능한 좌석 조회 API
+  @Get(':concertId/sessions/:sessionId/seats')
+  getAvailableSeats(
+    @Param('concertId') concertId: string,
+    @Param('sessionId') sessionId: string,
+    @Query('status') status: string,
+  ) {
+    const availableSeats = [1, 2, 3, 4, 5];
+    const concertName = '흑백요리사';
+
+    return {
+      statusCode: 200,
+      message: 'success',
+      data: {
+        concertId,
+        sessionId,
+        concertName,
+        availableSeats,
+      },
+    };
+  }
+
+  //콘서트 좌석 예약
   @Post(':concertId/sessions/:sessionId/payments')
   payForReservedSeat(
     @Param('concertId') concertId: string,
