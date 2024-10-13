@@ -2,11 +2,11 @@
 ├── src/
 │   ├── common/
 │   │   └──  databases
-│   │  
+│   │
 │   ├── application/
 │   │   ├── concerts/
 │   │   │   ├── concerts.module.ts
-│   │   │   ├── concerts.facade.ts  
+│   │   │   ├── concerts.facade.ts
 │   │   │
 │   │   ├── points/
 │   │   │   ├── points.module.ts
@@ -14,8 +14,8 @@
 │   │   ├── waiting-queues/
 │   │   │   ├── waiting-queues.module.ts
 │   │
-│   │    
-│   ├── api/ 
+│   │
+│   ├── api/
 │   │   ├── concerts/
 │   │   │   ├── concerts.controller.ts
 │   │   │
@@ -24,11 +24,11 @@
 │   │   │
 │   │   ├── waiting-queues/
 │   │   │   ├── waiting-queues.controller.ts
-│   │  
-│   │     
+│   │
+│   │
 │   ├── domain/
 │   │   ├── reservations/
-│   │   │   ├── reservation.ts  
+│   │   │   ├── reservation.ts
 │   │   │   ├── reservation.service.ts
 │   │   │   ├── reservation.service.spec.ts
 │   │   │   ├── interfaces
@@ -39,12 +39,12 @@
 │   │   │   ├── payment.service.spec.ts
 │   │   │   ├── interfaces
 │   │   │   │   ├── payment.repository.ts
-│   │  
-│   │   
+│   │
+│   │
 │   ├── infrastructure/
 │   │   ├── reservations/
-│   │   │   ├── registration.repository.impl.ts
-│   │   │ 
+│   │   │   ├── reservation.repository.impl.ts
+│   │   │
 │   │   ├── payments/
 │   │   │   ├── payment.repository.impl.ts
 ```
