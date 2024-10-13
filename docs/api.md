@@ -4,14 +4,14 @@
 
 | No  | **기능**                   | **엔드포인트**                                                      | **메서드** | **설명**                                      |
 | --- | -------------------------- | ------------------------------------------------------------------- | ---------- | --------------------------------------------- |
-| 1   | 유저 대기열 조회           | `/users/{userId}/queue`                                             | `GET`      | 사용자의 현재 대기열 상태를 조회합니다.       |
-| 2   | 유저 대기열 신청           | `/users/{userId}/queue`                                             | `POST`     | 서비스 이용권을 발급하고 대기열에 추가합니다. |
+| 1   | 유저 대기열 조회           | `/waiting-queues`                                                   | `GET`      | 사용자의 현재 대기열 상태를 조회합니다.       |
+| 2   | 유저 대기열 신청           | `/waiting-queues`                                                   | `POST`     | 서비스 이용권을 발급하고 대기열에 추가합니다. |
 | 3   | 예약 가능 날짜 조회        | `/concerts/{concertId}/sessions?date={YY-MM-DD}&status=available`   | `GET`      | 특정 콘서트의 예약 가능한 날짜를 조회합니다.  |
 | 4   | 예약 가능 날짜의 좌석 조회 | `/concerts/{concertId}/sessions/{sessionId}/seats?status=available` | `GET`      | 특정 날짜의 예약 가능한 좌석을 조회합니다.    |
 | 5   | 콘서트 좌석 예약           | `/concerts/{concertId}/sessions/{sessionId}/reservations`           | `POST`     | 특정 좌석을 예약합니다.                       |
 | 6   | 콘서트 좌석 결제           | `/concerts/{concertId}/sessions/{sessionId}/payments`               | `POST`     | 예약된 좌석에 대한 결제를 처리합니다.         |
-| 7   | 잔액 조회                  | `/users/{userId}/points`                                            | `GET`      | 사용자의 현재 잔액을 조회합니다.              |
-| 8   | 잔액 충전                  | `/users/{userId}/points`                                            | `POST`     | 사용자의 잔액에 자금을 추가합니다.            |
+| 7   | 잔액 조회                  | `/points`                                                           | `GET`      | 사용자의 현재 잔액을 조회합니다.              |
+| 8   | 잔액 충전                  | `/points`                                                           | `PATCH`    | 사용자의 잔액에 자금을 추가합니다.            |
 | 9   | 회원가입                   | `/users`                                                            | `POST`     | 새로운 사용자를 등록합니다.                   |
 
 ## 1. REST API 를 시작하기 전에
