@@ -1,38 +1,50 @@
 ```shell
 ├── src/
-│   ├── concerts/
-│   │   ├── concerts.controller.ts
-│   │   ├── concerts.service.ts
-│   │   ├── concerts.repository.ts
-│   │   ├── concerts.repository.imple.ts
-│   │   └── concerts.module.ts
+│   ├── common/
+│   │   └──  databases
+│   │  
+│   ├── application/
+│   │   ├── concerts/
+│   │   │   ├── concerts.module.ts
+│   │   │   ├── concerts.facade.ts  
+│   │   │
+│   │   ├── points/
+│   │   │   ├── points.module.ts
+│   │   │
+│   │   ├── waiting-queues/
+│   │   │   ├── waiting-queues.module.ts
 │   │
-│   ├── reservation/
-│   │   ├── reservation.controller.ts
-│   │   ├── reservation.service.ts
-│   │   ├── reservation.repository.ts
-│   │   ├── reservation.repository.imple.ts
-│   │   └── reservation.module.ts
-│   │
-│   ├── points/
-│   │   ├── points.controller.ts
-│   │   ├── points.service.ts
-│   │   ├── points.repository.ts
-│   │   ├── points.repository.imple.ts
-│   │   └── points.module.ts
-│   │
-│   ├── queues/
-│   │   ├── queues.controller.ts
-│   │   ├── queues.service.ts
-│   │   ├── queues.repository.ts
-│   │   ├── queues.repository.imple.ts
-│   │   └── queues.module.ts
-│   │
-│   ├── concerts-reservation-facade/
-│   │   ├── concerts-reservation-facade.controller.ts
-│   │   ├── lecture-facade.service.ts
-│   │   ├── lecture-facade.service.imple.ts
-│   │   └── lecture-facade.module.ts
-└───
-
+│   │    
+│   ├── api/ 
+│   │   ├── concerts/
+│   │   │   ├── concerts.controller.ts
+│   │   │
+│   │   ├── points/
+│   │   │   ├── points.controller.ts
+│   │   │
+│   │   ├── waiting-queues/
+│   │   │   ├── waiting-queues.controller.ts
+│   │  
+│   │     
+│   ├── domain/
+│   │   ├── reservations/
+│   │   │   ├── reservation.ts  
+│   │   │   ├── reservation.service.ts
+│   │   │   ├── reservation.service.spec.ts
+│   │   │   ├── interfaces
+│   │   │   │   ├── registration.repository.ts
+│   │   │
+│   │   ├── payments/
+│   │   │   ├── payment.service.ts
+│   │   │   ├── payment.service.spec.ts
+│   │   │   ├── interfaces
+│   │   │   │   ├── payment.repository.ts
+│   │  
+│   │   
+│   ├── infrastructure/
+│   │   ├── reservations/
+│   │   │   ├── registration.repository.impl.ts
+│   │   │ 
+│   │   ├── payments/
+│   │   │   ├── payment.repository.impl.ts
 ```
