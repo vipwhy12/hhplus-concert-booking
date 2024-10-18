@@ -13,7 +13,6 @@ export class WaitingQueuesController {
   }
 
   @Post()
-  //💥 회원이라면 회원을 넣어줘야 하지 않을까?
   async addToWaitingQueue() {
     return await this.waitingQueuesService.addToWaitingQueue();
   }
