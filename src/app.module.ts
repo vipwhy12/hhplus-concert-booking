@@ -8,10 +8,20 @@ import { jwtConstants } from './common/constants/constants';
 import { Point } from './common/entities/point.entity';
 import { PointsModule } from './modules/points/points.module';
 import { UserEntity } from './common/entities/user.entity';
+import { WaitingQueuesModule } from './modules/waiting-queue/waiting.queues.module';
+import { WaitingQueuesEntity } from './common/entities/waiting.queue.entity';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ConcertsModule } from './modules/concerts/concerts.module';
+import { ConcertEntity } from './common/entities/concert.entity';
+import { Session } from 'inspector/promises';
+import { SessionEntity } from './common/entities/session.entity';
+import { SeatEntity } from './common/entities/seat.entity';
+import { ReservationEntity } from './common/entities/reservation.entity';
 
 //TODO: import 외부로 빼기
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -32,10 +42,20 @@ import { UserEntity } from './common/entities/user.entity';
         database: 'ConcertBooking',
         synchronize: true,
         logging: true,
-        entities: [Point, UserEntity],
+        entities: [
+          Point,
+          UserEntity,
+          WaitingQueuesEntity,
+          ConcertEntity,
+          SessionEntity,
+          SeatEntity,
+          ReservationEntity,
+        ],
       }),
     }),
     PointsModule,
+    WaitingQueuesModule,
+    ConcertsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
