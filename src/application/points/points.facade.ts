@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Payment } from 'src/domain/payments/payment';
 import { PaymentsService } from 'src/domain/payments/payments.service';
 import { UsersService } from 'src/domain/users/users.service';
 
@@ -9,13 +10,15 @@ export class PointsFacade {
     private readonly paymentService: PaymentsService,
   ) {}
 
-  async point(userId: number) {
+  async point(userId: number): Promise<Payment> {
     await this.userService.isValidUser(userId);
+
     return await this.paymentService.point(userId);
   }
 
   async charge(userId: number, amount: number) {
     await this.userService.isValidUser(userId);
+
     return await this.paymentService.chargePoint(userId, amount);
   }
 }

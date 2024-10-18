@@ -1,10 +1,9 @@
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApiChargePoints, ApiGetPoints } from './docs/custom-api.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { Payment } from 'src/domain/payments/payment';
 import { PointDto } from './dto';
 import { PointRequestDto } from './dto/request/points.request';
 import { PointsFacade } from 'src/application/points/points.facade';
+import { PointResponseDto } from './dto/response/points.response';
 import {
   Body,
   Controller,
@@ -14,8 +13,6 @@ import {
   Request,
 } from '@nestjs/common';
 
-@ApiBearerAuth()
-@ApiTags('points')
 @Controller('points')
 @UseGuards(AuthGuard)
 export class PointsController {
@@ -23,21 +20,25 @@ export class PointsController {
 
   @Get()
   @ApiGetPoints()
-  async point(@Request() req: PointRequestDto): Promise<Payment> {
+  async point(@Request() req: PointRequestDto): Promise<PointResponseDto> {
     const { id } = req.user;
+    const { userId, amount } = await this.pointFacade.point(id);
 
-    return await this.pointFacade.point(id);
+    return new PointResponseDto(userId, amount);
   }
 
   @Patch()
   @ApiChargePoints()
   async charge(
-    @Body() pointDto: PointDto,
     @Request() req: PointRequestDto,
-  ): Promise<Payment> {
+    @Body() pointDto: PointDto,
+  ): Promise<PointResponseDto> {
     const { id } = req.user;
-    const { amount } = pointDto;
+    const { userId, amount } = await this.pointFacade.charge(
+      id,
+      pointDto.amount,
+    );
 
-    return await this.pointFacade.charge(id, amount);
+    return new PointResponseDto(userId, amount);
   }
 }

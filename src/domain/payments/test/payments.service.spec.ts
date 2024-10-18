@@ -31,17 +31,19 @@ describe('PaymentsService', () => {
     });
   });
 
-  describe('포인트 조회 시,', () => {
-    describe('매개변수가 유효하다면', () => {
-      const validUserId = 1;
-      const expectResult = { userId: 1, amount: 1000 };
+  describe('getAvailableSessions', () => {
+    describe('포인트 조회 시,', () => {
+      describe('매개변수가 유효하다면', () => {
+        const validUserId = 1;
+        const expectResult = { userId: 1, amount: 1000 };
 
-      it('성공한다.', async () => {
-        paymentsRepository.getUserPoint.mockResolvedValue(expectResult);
+        it('성공한다.', async () => {
+          paymentsRepository.getUserPoint.mockResolvedValue(expectResult);
 
-        const result = paymentsService.point(validUserId);
+          const result = paymentsService.point(validUserId);
 
-        await expect(result).resolves.toBe(expectResult);
+          await expect(result).resolves.toBe(expectResult);
+        });
       });
     });
   });
@@ -49,10 +51,11 @@ describe('PaymentsService', () => {
   describe('포인트 충전 시,', () => {
     describe('충전 포인트가 0보다 작으면', () => {
       const invalidAmount = -1;
+      const validUserId = 1;
       it('실패한다.', () => {
-        expect(() => paymentsService.chargePoint(1, invalidAmount)).toThrow(
-          '충전 금액은 0보다 커야 합니다.',
-        );
+        expect(() =>
+          paymentsService.chargePoint(validUserId, invalidAmount),
+        ).toThrow('충전 금액은 0보다 커야 합니다.');
       });
     });
   });
