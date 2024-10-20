@@ -5,20 +5,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './common/constants/constants';
-import { Point } from './common/entities/point.entity';
-import { PointsModule } from './modules/points/points.module';
-import { UserEntity } from './common/entities/user.entity';
-import { WaitingQueuesModule } from './modules/waiting-queue/waiting.queues.module';
-import { WaitingQueuesEntity } from './common/entities/waiting.queue.entity';
 import { ScheduleModule } from '@nestjs/schedule';
-import { ConcertsModule } from './modules/concerts/concerts.module';
-import { ConcertEntity } from './common/entities/concert.entity';
-import { Session } from 'inspector/promises';
-import { SessionEntity } from './common/entities/session.entity';
-import { SeatEntity } from './common/entities/seat.entity';
-import { ReservationEntity } from './common/entities/reservation.entity';
+import { DomainModule } from './modules/domain.module';
+import { typeOrmConfig } from './common/config/database/config';
 
-//TODO: import 외부로 빼기
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -33,29 +23,10 @@ import { ReservationEntity } from './common/entities/reservation.entity';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASSWORD'),
-        database: 'ConcertBooking',
-        synchronize: true,
-        logging: true,
-        entities: [
-          Point,
-          UserEntity,
-          WaitingQueuesEntity,
-          ConcertEntity,
-          SessionEntity,
-          SeatEntity,
-          ReservationEntity,
-        ],
-      }),
+      useFactory: (configService: ConfigService) =>
+        typeOrmConfig(configService),
     }),
-    PointsModule,
-    WaitingQueuesModule,
-    ConcertsModule,
+    DomainModule,
   ],
   controllers: [AppController],
   providers: [AppService],
