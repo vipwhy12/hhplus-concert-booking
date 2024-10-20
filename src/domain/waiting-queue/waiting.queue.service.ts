@@ -3,7 +3,6 @@ import {
   WaitingQueuesRepository,
   WaitingQueuesRepositoryToken,
 } from './waiting.queue.repositoty';
-import { WatingQueueStatus } from 'src/common/enums/waiting.queue.status';
 
 @Injectable()
 export class WaitingQueuesService {

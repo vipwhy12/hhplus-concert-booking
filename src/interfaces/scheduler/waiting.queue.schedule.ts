@@ -1,14 +1,30 @@
+import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { WatingQueueStatus } from 'src/common/enums/waiting.queue.status';
 import { WaitingQueuesRepository } from 'src/domain/waiting-queue/waiting.queue.repositoty';
 
-export class WaitingQueuesScheduler {
+@Injectable()
+export class WaitingQueueScheduler {
   constructor(
     private readonly waitingQueuesRepository: WaitingQueuesRepository,
   ) {}
 
-  // TODO: 대기열을 활성화하는 메서드
-  // 계층형 레이어드 에서 어떤 계층일까? 호출 되는 메서드는 모두 어떤 계층에 속해야 할까요
+  // 만료된 상태를 업데이트
+  @Cron(CronExpression.EVERY_5_MINUTES)
+  async updateExpiredStatuses() {
+    const now = new Date();
+    const expiredItems =
+      await this.waitingQueuesRepository.findExpiredQueues(now);
+
+    for (const item of expiredItems) {
+      await this.waitingQueuesRepository.updateStatus(
+        item.id,
+        WatingQueueStatus.EXPIRED,
+      );
+    }
+  }
+
+  // 대기열을 활성화
   @Cron(CronExpression.EVERY_10_MINUTES)
   async activateWaitingQueues() {
     const waitingItems = await this.waitingQueuesRepository.getWaitingQueues();
@@ -26,20 +42,5 @@ export class WaitingQueuesScheduler {
     }
 
     console.log(`Activated ${waitingItems.length} waiting queues.`);
-  }
-
-  // 대기열에서 삭제하는 메서드
-  @Cron(CronExpression.EVERY_5_MINUTES)
-  async updateExpiredStatuses() {
-    const now = new Date();
-    const expiredItems =
-      await this.waitingQueuesRepository.findExpiredQueues(now);
-
-    for (const item of expiredItems) {
-      await this.waitingQueuesRepository.updateStatus(
-        item.id,
-        WatingQueueStatus.EXPIRED,
-      );
-    }
   }
 }
