@@ -4,7 +4,7 @@ import { ConcertEntity } from 'src/common/entities/concert.entity';
 import { ReservationEntity } from 'src/common/entities/reservation.entity';
 import { SeatEntity } from 'src/common/entities/seat.entity';
 import { SessionEntity } from 'src/common/entities/session.entity';
-import { UserEntity } from 'src/common/entities/user.entity';
+import { UserEntity } from 'src/infrastructure/auth/entity/user.entity';
 import { PointEntity } from 'src/infrastructure/payments/entity/point.entity';
 import { WaitingQueuesEntity } from 'src/infrastructure/waiting-queues/entity/waiting.queue.entity';
 

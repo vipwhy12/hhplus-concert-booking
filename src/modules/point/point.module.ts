@@ -1,15 +1,15 @@
+import { AuthRepositoryImpl } from 'src/infrastructure/auth/auth.repository.impl';
+import { AuthRepositoryToken } from 'src/domain/auth/auth.repository';
+import { AuthService } from 'src/domain/auth/auth.service';
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PointsFacade } from 'src/application/points/points.facade';
-import { UserEntity } from 'src/common/entities/user.entity';
+import { PaymentRepositoryImpl } from 'src/infrastructure/payments/payment.repository.impl';
 import { PaymentRepositoryToken } from 'src/domain/payments/payments.repository';
 import { PaymentsService } from 'src/domain/payments/payments.service';
-import { UsersRepositoryToken } from 'src/domain/users/users.repository';
-import { UsersService } from 'src/domain/users/users.service';
 import { PointEntity } from 'src/infrastructure/payments/entity/point.entity';
-import { PaymentRepositoryImpl } from 'src/infrastructure/payments/payment.repository.impl';
-import { UsersRepositoryImpl } from 'src/infrastructure/users/users.repository.impl';
 import { PointsController } from 'src/interfaces/api/points/points.controller';
+import { PointsFacade } from 'src/application/points/points.facade';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from 'src/infrastructure/auth/entity/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PointEntity, UserEntity])],
@@ -17,9 +17,9 @@ import { PointsController } from 'src/interfaces/api/points/points.controller';
   providers: [
     PointsFacade,
     PaymentsService,
-    UsersService,
+    AuthService,
     { provide: PaymentRepositoryToken, useClass: PaymentRepositoryImpl },
-    { provide: UsersRepositoryToken, useClass: UsersRepositoryImpl },
+    { provide: AuthRepositoryToken, useClass: AuthRepositoryImpl },
   ],
 })
 export class PointModule {}

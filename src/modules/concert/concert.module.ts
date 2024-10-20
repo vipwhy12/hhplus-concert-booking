@@ -1,17 +1,17 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthRepositoryToken } from 'src/domain/auth/auth.repository';
+import { AuthRepositoryImpl } from 'src/infrastructure/auth/auth.repository.impl';
+import { AuthService } from 'src/domain/auth/auth.service';
+import { ConcertsController } from 'src/interfaces/api/concerts';
 import { ConcertsFacade } from 'src/application/concerts/concerts.facade';
 import { ReservationEntity } from 'src/common/entities/reservation.entity';
-import { SeatEntity } from 'src/common/entities/seat.entity';
-import { SessionEntity } from 'src/common/entities/session.entity';
-import { UserEntity } from 'src/common/entities/user.entity';
+import { ReservationRepositoryImpl } from 'src/infrastructure/reservations/reservation.repository.impl';
 import { ReservationsRepositoryToken } from 'src/domain/reservations/reservation.repository';
 import { ReservationsService } from 'src/domain/reservations/reservation.service';
-import { UsersRepositoryToken } from 'src/domain/users/users.repository';
-import { UsersService } from 'src/domain/users/users.service';
-import { ReservationRepositoryImpl } from 'src/infrastructure/reservations/reservation.repository.impl';
-import { UsersRepositoryImpl } from 'src/infrastructure/users/users.repository.impl';
-import { ConcertsController } from 'src/interfaces/api/concerts';
+import { SeatEntity } from 'src/common/entities/seat.entity';
+import { SessionEntity } from 'src/common/entities/session.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from 'src/infrastructure/auth/entity/user.entity';
+import { Module } from '@nestjs/common';
 
 @Module({
   imports: [
@@ -26,14 +26,14 @@ import { ConcertsController } from 'src/interfaces/api/concerts';
   providers: [
     ConcertsFacade,
     ReservationsService,
-    UsersService,
+    AuthService,
     {
       provide: ReservationsRepositoryToken,
       useClass: ReservationRepositoryImpl,
     },
     {
-      provide: UsersRepositoryToken,
-      useClass: UsersRepositoryImpl,
+      provide: AuthRepositoryToken,
+      useClass: AuthRepositoryImpl,
     },
   ],
 })

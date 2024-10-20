@@ -5,8 +5,8 @@ import {
 } from 'typeorm';
 
 export class BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
-  readonly id: bigint;
+  @PrimaryGeneratedColumn()
+  readonly id: number;
 
   @CreateDateColumn({ type: 'datetime', comment: '생성일' })
   readonly createAt: Date;

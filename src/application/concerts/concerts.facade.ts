@@ -1,12 +1,12 @@
-import { UsersService } from 'src/domain/users/users.service';
-import { ReservationsService } from './../../domain/reservations/reservation.service';
+import { AuthService } from 'src/domain/auth/auth.service';
 import { Injectable } from '@nestjs/common';
+import { ReservationsService } from 'src/domain/reservations/reservation.service';
 
 @Injectable()
 export class ConcertsFacade {
   constructor(
     private readonly reservationsService: ReservationsService,
-    private readonly userService: UsersService,
+    private readonly authService: AuthService,
   ) {}
 
   //3. 좌석 예약하기

@@ -1,19 +1,18 @@
+import { AuthRepository } from 'src/domain/auth/auth.repository';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/common/entities/user.entity';
-import { User } from 'src/domain/users/user';
-import { UsersRepository } from 'src/domain/users/users.repository';
 import { Repository } from 'typeorm';
+import { UserEntity } from './entity/user.entity';
 
 @Injectable()
-export class UsersRepositoryImpl implements UsersRepository {
+export class AuthRepositoryImpl implements AuthRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async getUserById(id: number): Promise<User> {
+  async checkUserExists(id: number): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { id } });
-    return new User(user.id, user.name);
+    return !!user;
   }
 }
