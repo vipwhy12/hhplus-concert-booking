@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { ReservationStatus } from '../enum/reserve.status';
+import { ReservationStatus } from '../enums/reserve.status';
 
 @Entity('reservations')
 export class ReservationEntity {

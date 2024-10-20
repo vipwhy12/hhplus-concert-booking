@@ -8,7 +8,7 @@ import { UserEntity } from 'src/common/entities/user.entity';
 import { PointEntity } from 'src/infrastructure/payments/entity/point.entity';
 import { WaitingQueuesEntity } from 'src/infrastructure/waiting-queues/entity/waiting.queue.entity';
 
-export const typeOrmConfig = (
+export const typeOrmOptions = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => ({
   type: 'mysql',
