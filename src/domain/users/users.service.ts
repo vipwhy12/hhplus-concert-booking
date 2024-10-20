@@ -8,6 +8,7 @@ export class UsersService {
     private readonly usersRepository: UsersRepository,
   ) {}
 
+  //이미 존재하는 유저인지 확인했는데 굳이 메서드 명이 이래야 할 필요가  있니?
   async isValidUser(userId: number) {
     const isValidUser = await this.usersRepository.getUserById(userId);
 

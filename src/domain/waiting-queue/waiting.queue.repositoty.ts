@@ -1,7 +1,9 @@
-import { WatingQueueStatus } from './enum/waiting.queue.status';
+import { WatingQueueStatus } from 'src/common/enums/waiting.queue.status';
 
 export const WaitingQueuesRepositoryToken = Symbol('WaitingQueuesRepository');
 export interface WaitingQueuesRepository {
+  //TODO: 반환값 선언하기
+
   //🪢 대기열 조회
   getWaitingQueues();
 

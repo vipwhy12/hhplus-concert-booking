@@ -1,4 +1,4 @@
-import { ResponseDto } from 'src/common/dto/response.dto';
+import { ResponseDto } from 'src/common/dtos/response.dto';
 
 export class PointResponseDto extends ResponseDto<{
   userId: number;

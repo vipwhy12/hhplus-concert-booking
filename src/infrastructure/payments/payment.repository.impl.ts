@@ -1,15 +1,15 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentsRepository } from 'src/domain/payments/payments.repository';
-import { Point } from 'src/common/entities/point.entity';
 import { Payment } from 'src/domain/payments/payment';
 import { Injectable } from '@nestjs/common';
+import { PointEntity } from './entity/point.entity';
 
 @Injectable()
 export class PaymentRepositoryImpl implements PaymentsRepository {
   constructor(
-    @InjectRepository(Point)
-    private readonly pointRepository: Repository<Point>,
+    @InjectRepository(PointEntity)
+    private readonly pointRepository: Repository<PointEntity>,
   ) {}
 
   async getUserPoint(userId: number): Promise<Payment> {
