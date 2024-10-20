@@ -61,6 +61,6 @@ export class ConcertsController {
   ) {
     const { id } = req.user;
 
-    return this.concertsPacades.processPayment(paymentData.reservationId);
+    // return this.concertsPacades.processPayment(paymentData.reservationId);
   }
 }

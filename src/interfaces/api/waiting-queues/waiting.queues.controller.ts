@@ -22,6 +22,6 @@ export class WaitingQueuesController {
   @Post()
   @ApiAddToWaitingQueue()
   async addToWaitingQueue() {
-    return await this.waitingQueuesService.addToWaitingQueue();
+    // return await this.waitingQueuesService.addToWaitingQueue();
   }
 }

@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody } from '@nestjs/swagger';
-import { PointDto } from '../dto';
+import { PointDto } from '../dto/point.dto';
 
 export function ApiPoints() {
   return applyDecorators(ApiTags('points'), ApiBearerAuth());

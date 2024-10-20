@@ -1,9 +1,9 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { WaitingQueuesRepository } from 'src/domain/waiting-queue/waiting.queue.repositoty';
 import { Injectable } from '@nestjs/common';
-import { WaitingQueuesEntity } from 'src/common/entities/waiting.queue.entity';
 import { Repository } from 'typeorm';
-import { WatingQueueStatus } from 'src/domain/waiting-queue/enum/waiting.queue.status';
+import { WatingQueueStatus } from 'src/common/enums/waiting.queue.status';
+import { WaitingQueuesEntity } from './entity/waiting.queue.entity';
 
 @Injectable()
 export class WaitingQueuesRepositoryImpl implements WaitingQueuesRepository {
@@ -12,11 +12,12 @@ export class WaitingQueuesRepositoryImpl implements WaitingQueuesRepository {
     private readonly waitingQueuesRepository: Repository<WaitingQueuesEntity>,
   ) {}
 
+  //TODO: 형변환 필요
   async getWaitingQueueById(id: number) {
     const result = await this.waitingQueuesRepository.findOne({
       where: { id },
     });
-    //TODO: 형변환 필요
+
     return result;
   }
 

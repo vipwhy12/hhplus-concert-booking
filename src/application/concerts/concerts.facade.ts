@@ -34,28 +34,25 @@ export class ConcertsFacade {
   async processPayment(reservationId: number) {
     //4-0. 토큰 확인
     //4-0. 예약 확인
-    const reservation =
-      await this.reservationsService.getReservationById(reservationId);
-
-    const { userId, sessionId, seatId } = reservation;
-
-    //4-1. 유저 확인
-    await this.userService.isValidUser(userId);
-
-    //4-2. 콘서트 가격 확인
-    await this.reservationsService.getSessionById(sessionId);
-
-    //4-3 좌석 예약 정보확인
-    await this.reservationsService.isReservableSeat(seatId);
-
-    //4-4. 좌석
-    await this.reservationsService.updateSeatStatus(sessionId, userId);
-
-    //4-5. 예약 정보 저장
-    await this.reservationsService.saveReservationInfo(
-      concertId,
-      sessionId,
-      userId,
-    );
+    // const reservation =
+    //   await this.reservationsService.getReservationById(reservationId);
+    // const { userId, sessionId, seatId } = reservation;
+    // //4-1. 유저 확인
+    // await this.userService.isValidUser(userId);
+    // //컨포넌트 파인더? 오...
+    // //userFinder
+    // //4-2. 콘서트 가격 확인
+    // await this.reservationsService.getSessionById(sessionId);
+    // //4-3 좌석 예약 정보확인
+    // await this.reservationsService.isReservableSeat(seatId);
+    // //4-4. 좌석
+    // await this.reservationsService.updateSeatStatus(sessionId, userId);
+    // //4-5. 예약 정보 저장
+    // await this.reservationsService.saveReservationInfo(
+    //   concertId,
+    //   sessionId,
+    //   userId,
+    // );
+    //4-6. 포인트 사용!!!
   }
 }

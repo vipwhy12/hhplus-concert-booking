@@ -1,6 +1,5 @@
 import { ApiChargePoints, ApiGetPoints } from './docs/custom-api.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { PointDto } from './dto';
 import { PointRequestDto } from './dto/request/points.request';
 import { PointsFacade } from 'src/application/points/points.facade';
 import { PointResponseDto } from './dto/response/points.response';
@@ -12,6 +11,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
+import { PointDto } from './dto/point.dto';
 
 @Controller('points')
 @UseGuards(AuthGuard)

@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ReservationEntity } from 'src/common/entities/reservation.entity';
 import { SeatEntity } from 'src/common/entities/seat.entity';
 import { SessionEntity } from 'src/common/entities/session.entity';
-import { ReservationStatus } from 'src/common/enum/reserve.status';
-import { SeatStatus } from 'src/common/enum/seat.status';
+import { ReservationStatus } from 'src/common/enums/reserve.status';
+import { SeatStatus } from 'src/common/enums/seat.status';
 import { ReservationsRepository } from 'src/domain/reservations/reservation.repository';
 import { Repository } from 'typeorm';
 
