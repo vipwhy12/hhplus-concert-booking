@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WaitingQueuesEntity } from 'src/common/entities/waiting.queue.entity';
 import { WaitingQueuesRepositoryToken } from 'src/domain/waiting-queue/waiting.queue.repositoty';
 import { WaitingQueuesService } from 'src/domain/waiting-queue/waiting.queue.service';
+import { WaitingQueuesEntity } from 'src/infrastructure/waiting-queues/entity/waiting.queue.entity';
 import { WaitingQueuesRepositoryImpl } from 'src/infrastructure/waiting-queues/waiting.queues.repository.impl';
 import { WaitingQueuesController } from 'src/interfaces/api/waiting-queues/waiting.queues.controller';
 
@@ -17,4 +17,4 @@ import { WaitingQueuesController } from 'src/interfaces/api/waiting-queues/waiti
     },
   ],
 })
-export class WaitingQueuesModule {}
+export class WaitingQueueModule {}

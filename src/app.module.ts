@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './common/constants/constants';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DomainModule } from './modules/domain.module';
-import { typeOrmConfig } from './common/config/database/config';
+import { typeOrmOptions } from './common/config/database/type.orm.options';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { typeOrmConfig } from './common/config/database/config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
-        typeOrmConfig(configService),
+        typeOrmOptions(configService),
     }),
     DomainModule,
   ],
