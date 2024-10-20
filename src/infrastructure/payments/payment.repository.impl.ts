@@ -1,23 +1,24 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentsRepository } from 'src/domain/payments/payments.repository';
-import { Payment } from 'src/domain/payments/payment';
 import { Injectable } from '@nestjs/common';
-import { PointEntity } from './entity/point.entity';
+import { Point } from './entity/point.entity';
+import { PaymentMapper } from 'src/domain/payments/mapper/payment.mapper';
+import { Payment } from 'src/domain/payments/model/payment';
 
 @Injectable()
 export class PaymentRepositoryImpl implements PaymentsRepository {
   constructor(
-    @InjectRepository(PointEntity)
-    private readonly pointRepository: Repository<PointEntity>,
+    @InjectRepository(Point)
+    private readonly pointRepository: Repository<Point>,
   ) {}
 
-  async getUserPoint(userId: number): Promise<Payment> {
+  async getPointByUserId(userId: number): Promise<Payment> {
     const point = await this.pointRepository.findOne({ where: { userId } });
-    return new Payment(point.userId, point.amount);
+    return PaymentMapper.toDomain(point);
   }
 
-  async updatePoint(userId: number, amount: number): Promise<boolean> {
+  async isPointUpdated(userId: number, amount: number): Promise<boolean> {
     const result = await this.pointRepository.update(
       { userId }, // 조건
       { amount }, // 업데이트 내용

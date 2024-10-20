@@ -22,9 +22,8 @@ export class PointsController {
   @ApiGetPoints()
   async point(@Request() req: PointRequestDto): Promise<PointResponseDto> {
     const { id } = req.user;
-    const { userId, amount } = await this.pointFacade.point(id);
 
-    return new PointResponseDto(userId, amount);
+    return await this.pointFacade.point(id);
   }
 
   @Patch()
@@ -34,11 +33,7 @@ export class PointsController {
     @Body() pointDto: PointDto,
   ): Promise<PointResponseDto> {
     const { id } = req.user;
-    const { userId, amount } = await this.pointFacade.charge(
-      id,
-      pointDto.amount,
-    );
 
-    return new PointResponseDto(userId, amount);
+    return await this.pointFacade.charge(id, pointDto.amount);
   }
 }

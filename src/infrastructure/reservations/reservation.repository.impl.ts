@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ReservationEntity } from 'src/common/entities/reservation.entity';
-import { SeatEntity } from 'src/common/entities/seat.entity';
-import { SessionEntity } from 'src/common/entities/session.entity';
+import { ReservationEntity } from 'src/common/entity/reservation.entity';
+import { SeatEntity } from 'src/common/entity/seat.entity';
+import { SessionEntity } from 'src/common/entity/session.entity';
 import { ReservationStatus } from 'src/common/enums/reserve.status';
 import { SeatStatus } from 'src/common/enums/seat.status';
 import { ReservationsRepository } from 'src/domain/reservations/reservation.repository';

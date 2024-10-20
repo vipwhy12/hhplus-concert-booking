@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Payment } from './payment';
+import { Payment } from './model/payment';
 import {
-  PaymentRepositoryToken,
   PaymentsRepository,
+  PaymentRepositoryToken,
 } from './payments.repository';
 
 @Injectable()
@@ -12,28 +12,22 @@ export class PaymentsService {
     private readonly paymentsRepository: PaymentsRepository,
   ) {}
 
-  async point(userId: number): Promise<Payment> {
-    return await this.paymentsRepository.getUserPoint(userId);
+  async getPointByUserId(userId: number): Promise<Payment> {
+    return await this.paymentsRepository.getPointByUserId(userId);
   }
 
-  async chargePoint(userId: number, amount: number): Promise<Payment> {
-    if (amount <= 0) {
-      throw new Error('The amount must be greater than 0');
-    }
+  async chargePoint(userId: number, chargePoint: number): Promise<Payment> {
+    if (chargePoint < 1) throw new Error('The amount must be greater than 0');
 
-    const myPoint = await this.paymentsRepository.getUserPoint(userId);
-    const isUpdateSuccessful = await this.paymentsRepository.updatePoint(
+    const currentPoint = await this.paymentsRepository.getPointByUserId(userId);
+    const totalPoint = currentPoint.amount + chargePoint;
+    const isUpdateSuccessful = await this.paymentsRepository.isPointUpdated(
       userId,
-      myPoint.amount + amount,
+      totalPoint,
     );
 
-    if (!isUpdateSuccessful) {
-      throw new Error('Point update failed');
-    }
+    if (!isUpdateSuccessful) throw new Error('Point update failed');
 
-    return {
-      ...myPoint,
-      amount: myPoint.amount + amount,
-    };
+    return new Payment(userId, totalPoint);
   }
 }

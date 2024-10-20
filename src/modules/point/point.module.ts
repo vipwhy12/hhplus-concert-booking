@@ -5,14 +5,14 @@ import { Module } from '@nestjs/common';
 import { PaymentRepositoryImpl } from 'src/infrastructure/payments/payment.repository.impl';
 import { PaymentRepositoryToken } from 'src/domain/payments/payments.repository';
 import { PaymentsService } from 'src/domain/payments/payments.service';
-import { PointEntity } from 'src/infrastructure/payments/entity/point.entity';
 import { PointsController } from 'src/interfaces/api/points/points.controller';
 import { PointsFacade } from 'src/application/points/points.facade';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/infrastructure/auth/entity/user.entity';
+import { Point } from 'src/infrastructure/payments/entity/point.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PointEntity, UserEntity])],
+  imports: [TypeOrmModule.forFeature([Point, UserEntity])],
   controllers: [PointsController],
   providers: [
     PointsFacade,
