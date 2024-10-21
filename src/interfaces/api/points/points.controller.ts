@@ -1,8 +1,6 @@
-import { ApiChargePoints, ApiGetPoints } from './docs/custom-api.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { PointRequestDto } from './dto/request/points.request';
+import { AuthHeaderDto } from '../auth/auth.header.dto';
 import { PointsFacade } from 'src/application/points/points.facade';
-import { PointResponseDto } from './dto/response/points.response';
 import {
   Body,
   Controller,
@@ -11,29 +9,34 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { PointDto } from './dto/point.dto';
+import { PointRequestDto } from './dto/point.dto';
+import { PointResponseDto } from './dto/points.response';
+import {
+  SwaggerChargePoints,
+  SwaggerGetPoints,
+  SwaggerPointController,
+} from 'src/common/docs/point.document';
 
 @Controller('points')
 @UseGuards(AuthGuard)
+@SwaggerPointController()
 export class PointsController {
   constructor(private readonly pointFacade: PointsFacade) {}
 
   @Get()
-  @ApiGetPoints()
-  async point(@Request() req: PointRequestDto): Promise<PointResponseDto> {
-    const { id } = req.user;
-
+  @SwaggerGetPoints()
+  async point(@Request() user: AuthHeaderDto): Promise<PointResponseDto> {
+    const { id } = user;
     return await this.pointFacade.point(id);
   }
 
   @Patch()
-  @ApiChargePoints()
+  @SwaggerChargePoints()
   async charge(
-    @Request() req: PointRequestDto,
-    @Body() pointDto: PointDto,
+    @Request() user: AuthHeaderDto,
+    @Body() pointDto: PointRequestDto,
   ): Promise<PointResponseDto> {
-    const { id } = req.user;
-
+    const { id } = user;
     return await this.pointFacade.charge(id, pointDto.amount);
   }
 }

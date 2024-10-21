@@ -1,8 +1,8 @@
 import { AuthService } from 'src/domain/auth/auth.service';
 import { Injectable } from '@nestjs/common';
 import { PaymentsService } from 'src/domain/payments/payments.service';
-import { PointResponseDto } from 'src/interfaces/api/points/dto/response/points.response';
 import { PaymentMapper } from 'src/domain/payments/mapper/payment.mapper';
+import { PointResponseDto } from 'src/interfaces/api/points/dto/points.response';
 
 @Injectable()
 export class PointsFacade {
