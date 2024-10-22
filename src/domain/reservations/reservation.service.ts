@@ -6,9 +6,6 @@ import {
 
 @Injectable()
 export class ReservationsService {
-  getReservationById(reservationId: number) {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @Inject(ReservationsRepositoryToken)
     private readonly reservationRepository: ReservationsRepository,
@@ -47,5 +44,9 @@ export class ReservationsService {
 
   async updateSeatStatus(sessionId: number, seatId: number) {
     return await this.reservationRepository.updateSeatStatus(sessionId, seatId);
+  }
+
+  getReservationById(reservationId: number) {
+    throw new Error('Method not implemented.');
   }
 }

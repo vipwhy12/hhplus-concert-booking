@@ -1,12 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiHeader, ApiTags } from '@nestjs/swagger';
-
-// Waiting Queues 컨트롤러의 태그 정의
-export function ApiWaitingQueueTags() {
-  return applyDecorators(
-    ApiTags('Waiting Queues'), // Swagger 태그 정의
-  );
-}
+import { ApiOperation, ApiResponse, ApiHeader } from '@nestjs/swagger';
 
 // Get Waiting Queue by ID 메서드의 Swagger 설정
 export function ApiGetWaitingQueue() {
@@ -32,7 +25,6 @@ export function ApiGetWaitingQueue() {
   );
 }
 
-// Add to Waiting Queue 메서드의 Swagger 설정
 export function ApiAddToWaitingQueue() {
   return applyDecorators(
     ApiOperation({

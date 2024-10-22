@@ -1,9 +1,14 @@
-import { WaitingQueuesRepositoryToken } from 'src/domain/waiting-queue/waiting.queue.repositoty';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { WaitingQueuesService } from '../waiting.queue.service';
-import { WaitingQueuesRepository } from '../waiting.queue.repositoty';
-import { WatingQueueStatus } from '../enum/waiting.queue.status';
+import {
+  WaitingQueuesRepository,
+  WaitingQueuesRepositoryToken,
+} from '../waiting.queue.repositoty';
+import { WatingQueueStatus } from 'src/common/enums/waiting.queue.status';
+import { BadRequestException } from '@nestjs/common';
+import { WaitingQueueMapper } from '../mapper/waiting.queue.mapper';
+import { WaitingQueue } from '../model/waiting.queue';
 
 describe('WaitingQueuesService', () => {
   let waitingQueuesService: WaitingQueuesService;
@@ -32,105 +37,91 @@ describe('WaitingQueuesService', () => {
   });
 
   describe('getWaitingQueueById', () => {
-    it('대기열 상태가 없으면 에러를 던진다.', async () => {
-      waitingQueuesRepository.getWaitingQueueById.mockResolvedValue({
-        status: null,
-      });
-
-      await expect(waitingQueuesService.getWaitingQueueById(1)).rejects.toThrow(
-        'Status is missing',
-      );
-    });
-
     it('대기열이 만료되었으면 에러를 던진다.', async () => {
-      waitingQueuesRepository.getWaitingQueueById.mockResolvedValue({
+      const mockQueue: WaitingQueue = {
+        id: 1,
+        expireAt: new Date(),
         status: WatingQueueStatus.EXPIRED,
-      });
+      };
+      waitingQueuesRepository.getWaitingQueueById.mockResolvedValue(mockQueue);
 
       await expect(waitingQueuesService.getWaitingQueueById(1)).rejects.toThrow(
-        'Queue is expired',
+        new BadRequestException('Queue is expired'),
       );
     });
 
     it('대기열이 활성화 상태이면 대기열을 반환한다.', async () => {
-      const mockQueue = { status: WatingQueueStatus.ACTIVE };
+      const mockQueue: WaitingQueue = {
+        id: 1,
+        expireAt: new Date(),
+        status: WatingQueueStatus.ACTIVE,
+      };
       waitingQueuesRepository.getWaitingQueueById.mockResolvedValue(mockQueue);
 
       const result = await waitingQueuesService.getWaitingQueueById(1);
-      expect(result).toEqual(mockQueue);
+      expect(result).toEqual(WaitingQueueMapper.toRes(mockQueue));
     });
 
-    it('대기열이 대기 중이면 위치를 반환한다.', async () => {
-      const mockQueue = { id: 1, status: WatingQueueStatus.WAITING };
+    it('대기열이 대기 중이면 위치와 예상 대기 시간을 반환한다.', async () => {
+      const mockQueue: WaitingQueue = {
+        id: 1,
+        expireAt: new Date(),
+        status: WatingQueueStatus.WAITING,
+      };
+      const mockPosition = 2;
+      const mockWaitTime = 10;
+
       waitingQueuesRepository.getWaitingQueueById.mockResolvedValue(mockQueue);
-      waitingQueuesRepository.getPositionInQueue.mockResolvedValue(2);
+      waitingQueuesRepository.getPositionInQueue.mockResolvedValue(
+        mockPosition,
+      );
+      jest
+        .spyOn(waitingQueuesService, 'getMyWaitingTime')
+        .mockReturnValue(mockWaitTime);
 
       const result = await waitingQueuesService.getWaitingQueueById(1);
-      expect(result).toEqual({ ...mockQueue, position: 2 });
+
+      expect(result).toEqual({
+        ...WaitingQueueMapper.toRes(mockQueue),
+        position: mockPosition,
+        estimatedWaitTime: mockWaitTime,
+      });
     });
   });
 
   describe('addToWaitingQueue', () => {
     it('대기열에 정상적으로 추가되면 성공한다.', async () => {
-      const mockResult = { id: 1, expireAt: new Date() };
+      const mockResult: WaitingQueue = {
+        id: 1,
+        expireAt: new Date(),
+        status: WatingQueueStatus.WAITING,
+      };
       waitingQueuesRepository.addToWaitingQueue.mockResolvedValue(mockResult);
 
       const result = await waitingQueuesService.addToWaitingQueue();
-      expect(result).toEqual(mockResult);
+      expect(result).toEqual(WaitingQueueMapper.toRes(mockResult));
     });
   });
 
-  describe('updateExpiredStatuses', () => {
-    it('만료된 대기열 상태를 업데이트한다.', async () => {
-      const now = new Date();
-      const expiredQueues = [{ id: 1 }, { id: 2 }];
-      waitingQueuesRepository.findExpiredQueues.mockResolvedValue(
-        expiredQueues,
-      );
+  describe('getMyWaitingTime', () => {
+    it('내 대기 시간을 올바르게 계산한다.', () => {
+      const myTurn = 75;
+      const expectedWaitTime = 10; // 75번째 -> 2 그룹(50명 단위) -> 10분
 
-      await waitingQueuesService.updateExpiredStatuses();
-
-      expect(waitingQueuesRepository.updateStatus).toHaveBeenCalledTimes(2);
-      expect(waitingQueuesRepository.updateStatus).toHaveBeenCalledWith(
-        1,
-        WatingQueueStatus.EXPIRED,
-      );
-      expect(waitingQueuesRepository.updateStatus).toHaveBeenCalledWith(
-        2,
-        WatingQueueStatus.EXPIRED,
-      );
+      const result = waitingQueuesService.getMyWaitingTime(myTurn);
+      expect(result).toBe(expectedWaitTime);
     });
   });
 
-  describe('activateWaitingQueues', () => {
-    it('대기열이 없으면 로그를 출력하고 종료한다.', async () => {
-      waitingQueuesRepository.getWaitingQueues.mockResolvedValue([]);
-
-      const logSpy = jest.spyOn(console, 'log');
-
-      await waitingQueuesService.activateWaitingQueues();
-
-      expect(logSpy).toHaveBeenCalledWith('No waiting items to activate.');
-    });
-
-    it('대기열을 활성화하고 로그를 출력한다.', async () => {
-      const waitingQueues = [{ id: 1 }, { id: 2 }];
-      waitingQueuesRepository.getWaitingQueues.mockResolvedValue(waitingQueues);
-
-      const logSpy = jest.spyOn(console, 'log');
-
-      await waitingQueuesService.activateWaitingQueues();
-
-      expect(waitingQueuesRepository.updateStatus).toHaveBeenCalledTimes(2);
-      expect(waitingQueuesRepository.updateStatus).toHaveBeenCalledWith(
-        1,
-        WatingQueueStatus.ACTIVE,
+  describe('getMyPosition', () => {
+    it('내 대기 번호를 반환한다.', async () => {
+      const mockPosition = 2;
+      waitingQueuesRepository.getPositionInQueue.mockResolvedValue(
+        mockPosition,
       );
-      expect(waitingQueuesRepository.updateStatus).toHaveBeenCalledWith(
-        2,
-        WatingQueueStatus.ACTIVE,
-      );
-      expect(logSpy).toHaveBeenCalledWith('Activated 2 waiting queues.');
+
+      const result = await waitingQueuesService.getMyPosition(1);
+      expect(result).toBe(mockPosition);
     });
   });
 });

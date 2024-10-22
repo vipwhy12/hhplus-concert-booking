@@ -1,12 +1,12 @@
 import { ConfigService } from '@nestjs/config';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConcertEntity } from 'src/common/entity/concert.entity';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ReservationEntity } from 'src/common/entity/reservation.entity';
 import { SeatEntity } from 'src/common/entity/seat.entity';
 import { SessionEntity } from 'src/common/entity/session.entity';
 import { UserEntity } from 'src/infrastructure/auth/entity/user.entity';
 import { Point } from 'src/infrastructure/payments/entity/point.entity';
-import { WaitingQueuesEntity } from 'src/infrastructure/waiting-queues/entity/waiting.queue.entity';
+import { WaitingQueueEntity } from 'src/infrastructure/waiting-queue/entity/waiting.queue.entity';
 
 export const typeOrmOptions = (
   configService: ConfigService,
@@ -22,7 +22,7 @@ export const typeOrmOptions = (
   entities: [
     Point,
     UserEntity,
-    WaitingQueuesEntity,
+    WaitingQueueEntity,
     ConcertEntity,
     SessionEntity,
     SeatEntity,
