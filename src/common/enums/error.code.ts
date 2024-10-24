@@ -5,10 +5,16 @@ export enum ErrorCode {
   PointInvaild = '0102',
   PointUpdateFailed = '0103',
 
-  //02: Concert
   //03. User
-  UserInvaild = '0300',
+  UserInvaild = '0302',
 
   //04: Waiting Queue
-  WaitingQueueExpired = '0400',
+  WaitingQueueExpired = '0405',
+
+  //05: Session
+  SessionNotFound = '0500',
+
+  //06: Seat
+  SeatNotAvailable = '0603',
+  SeatUpdateFailed = '0604',
 }

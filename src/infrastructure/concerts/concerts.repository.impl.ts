@@ -5,11 +5,14 @@ import { SeatEntity } from 'src/common/entity/seat.entity';
 import { SessionEntity } from 'src/common/entity/session.entity';
 import { ReservationStatus } from 'src/common/enums/reserve.status';
 import { SeatStatus } from 'src/common/enums/seat.status';
+import {
+  SeatNotAvailableException,
+  SessionNotFoundException,
+} from 'src/common/exception/session.exception';
 import { ConcertRepository } from 'src/domain/concerts/concerts.repository';
 import { ConcertMapper } from 'src/domain/concerts/mapper/concert.mapper';
 import { Concert } from 'src/domain/concerts/model/concert';
-
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 @Injectable()
 export class ConcertRepositoryImple implements ConcertRepository {
@@ -27,6 +30,10 @@ export class ConcertRepositoryImple implements ConcertRepository {
       where: { concertId },
     });
 
+    if (!availableSessions.length) {
+      throw new SessionNotFoundException();
+    }
+
     return ConcertMapper.toDomainList(availableSessions);
   }
 
@@ -38,23 +45,47 @@ export class ConcertRepositoryImple implements ConcertRepository {
       },
     });
 
+    if (!availableSeats.length) {
+      throw new SeatNotAvailableException();
+    }
+
     return availableSeats;
   }
 
-  async isReservableSeat(sessionId: number, seatId: number): Promise<boolean> {
-    const seat = await this.seatRepository.findOne({
+  async isReservableSeat(
+    sessionId: number,
+    seatId: number,
+    manager: EntityManager,
+  ): Promise<boolean> {
+    const repository = manager
+      ? manager.getRepository(SeatEntity)
+      : this.seatRepository;
+
+    const seat = await repository.findOne({
       where: {
         id: seatId,
         sessionId: sessionId,
-        status: SeatStatus.AVAILABLE, // 예약 가능한 좌석인지 확인
+        status: SeatStatus.AVAILABLE,
       },
     });
 
-    return !!seat;
+    if (!seat) {
+      throw new SeatNotAvailableException();
+    }
+
+    return true;
   }
 
-  async updateSeatStatus(sessionId: number, seatId: number): Promise<void> {
-    const result = await this.seatRepository.update(
+  async updateSeatStatus(
+    sessionId: number,
+    seatId: number,
+    manager: EntityManager,
+  ): Promise<void> {
+    const repository = manager
+      ? manager.getRepository(SeatEntity)
+      : this.seatRepository;
+
+    const result = await repository.update(
       { id: seatId, sessionId: sessionId },
       { status: SeatStatus.RESERVED },
     );
@@ -68,8 +99,13 @@ export class ConcertRepositoryImple implements ConcertRepository {
     sessionId: number,
     seatId: number,
     userId: number,
+    manager?: EntityManager,
   ): Promise<ReservationEntity> {
-    return await this.reservationRepository.save({
+    const repository = manager
+      ? manager.getRepository(ReservationEntity)
+      : this.reservationRepository;
+
+    return await repository.save({
       concertSessionId: sessionId,
       seatId: seatId,
       userId: userId,
@@ -78,6 +114,26 @@ export class ConcertRepositoryImple implements ConcertRepository {
   }
 
   async getSessionById(id: number) {
-    return await this.sessionRepository.findOne({ where: { id } });
+    const session = await this.sessionRepository.findOne({ where: { id } });
+
+    if (!session) {
+      throw new SessionNotFoundException();
+    }
+
+    return session;
+  }
+
+  async getReservationById(id: number, manager?: EntityManager) {
+    const repository = manager
+      ? manager.getRepository(ReservationEntity)
+      : this.reservationRepository;
+
+    const reservation = await repository.findOne({
+      where: { id },
+    });
+
+    if (!reservation) {
+      throw new Error('Reservation not found');
+    }
   }
 }
