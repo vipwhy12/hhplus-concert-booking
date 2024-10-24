@@ -11,8 +11,6 @@ export class PointsFacade {
     private readonly paymentService: PaymentsService,
   ) {}
 
-  //TODO: response 여기서 반환하고 바꿔주는게 올바른가?
-  //TODO: 유저 확인 메서드로 따로 빼기?!
   async point(userId: number): Promise<PointResponseDto> {
     const checkUser = await this.authService.checkUserExists(userId);
     const point = await this.paymentService.getPointByUserId(userId);
