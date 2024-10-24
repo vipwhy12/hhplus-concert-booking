@@ -1,19 +1,19 @@
 import { AppModule } from 'src/app.module';
+import { ApiDocument } from './common/docs/api.document';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { apiDocument } from './common/docs/api.document';
+import { HttpExceptionFilter } from './common/exception/filter/exception.filter';
 import {
   WinstonModule,
   utilities as nestWinstonModuleUtilities,
 } from 'nest-winston';
 import * as winston from 'winston';
-import { HttpExceptionFilter } from './common/filter/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const PORT = process.env.PORT || 3000;
-  const apiDocumentConfig = new apiDocument().initializeOptions();
+  const apiDocumentConfig = new ApiDocument().initializeOptions();
   const document = SwaggerModule.createDocument(app, apiDocumentConfig);
   const logger = WinstonModule.createLogger({
     transports: new winston.transports.Console({
