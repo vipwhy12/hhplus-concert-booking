@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { WaitingQueue } from './model/waiting.queue';
 import { WaitingQueueMapper } from './mapper/waiting.queue.mapper';
 import { WaitingQueueResDto } from 'src/interfaces/api/waiting-queues/dto/waiting.queue.res.dto';
@@ -6,9 +6,8 @@ import {
   WaitingQueuesRepository,
   WaitingQueuesRepositoryToken,
 } from './waiting.queue.repositoty';
+import { WaitingQueueExpiredException } from 'src/common/exception/waiting.queue.expired.exception';
 
-//TODO: 에러처리 필요
-//TODO: 리팩터링 필요
 @Injectable()
 export class WaitingQueuesService {
   private readonly WAITING_GROUP_SIZE = 50;
@@ -25,7 +24,7 @@ export class WaitingQueuesService {
       const queue = await this.waitingQueuesRepository.getWaitingQueueById(id);
 
       if (WaitingQueue.isExpired(queue))
-        throw new BadRequestException('Queue is expired');
+        throw new WaitingQueueExpiredException();
 
       if (WaitingQueue.isWaiting(queue)) {
         await this.updateQueueWithPositionAndTime(queue, id);

@@ -4,6 +4,9 @@ import {
   PaymentsRepository,
   PaymentRepositoryToken,
 } from './payments.repository';
+import { InvalidPointException } from 'src/common/exception/invalid.point.exception';
+import { PointUpdateFailedException } from 'src/common/exception/point.update.failed.exception';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class PaymentsService {
@@ -12,12 +15,17 @@ export class PaymentsService {
     private readonly paymentsRepository: PaymentsRepository,
   ) {}
 
-  async getPointByUserId(userId: number): Promise<Payment> {
-    return await this.paymentsRepository.getPointByUserId(userId);
+  async getPointByUserId(
+    userId: number,
+    manager?: EntityManager,
+  ): Promise<Payment> {
+    return manager
+      ? await this.paymentsRepository.getPointByUserId(userId, manager)
+      : await this.paymentsRepository.getPointByUserId(userId);
   }
 
   async chargePoint(userId: number, chargePoint: number): Promise<Payment> {
-    if (chargePoint < 1) throw new Error('The amount must be greater than 0');
+    if (chargePoint < 1) throw new InvalidPointException();
 
     const currentPoint = await this.paymentsRepository.getPointByUserId(userId);
     const totalPoint = currentPoint.amount + chargePoint;
@@ -26,8 +34,7 @@ export class PaymentsService {
       totalPoint,
     );
 
-    if (!isUpdateSuccessful) throw new Error('Point update failed');
-
+    if (!isUpdateSuccessful) throw new PointUpdateFailedException();
     return new Payment(userId, totalPoint);
   }
 }

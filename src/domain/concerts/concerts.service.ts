@@ -3,6 +3,9 @@ import {
   ConcertRepository,
   ConcertRepositoryToken,
 } from './concerts.repository';
+import { Concert } from './model/concert';
+import { SeatEntity } from 'src/common/entity/seat.entity';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class ConcertsService {
@@ -11,38 +14,63 @@ export class ConcertsService {
     private readonly concertRepository: ConcertRepository,
   ) {}
 
-  //TODO: 1. 특정 콘서트의 예약 가능한 날짜 조회
-  async getAvailableSessions(id: number) {
+  async getAvailableSessions(id: number): Promise<Concert[]> {
     return await this.concertRepository.getAvailableSessions(id);
   }
 
-  //TODO: 2. 예약 가능한 콘서트의 좌석 정보조회
-  async getAvailableSeats(sessionId: number) {
+  async getAvailableSeats(sessionId: number): Promise<SeatEntity[]> {
     return await this.concertRepository.getAvailableSeats(sessionId);
   }
 
-  //3. 세션 아이디에 맞는 정보 반환 받기
   async getSessionById(sessionId: number) {
     return await this.concertRepository.getSessionById(sessionId);
   }
 
-  async isReservableSeat(sessionId: number, seatId: number): Promise<boolean> {
-    return await this.concertRepository.isReservableSeat(sessionId, seatId);
+  async isReservableSeat(
+    sessionId: number,
+    seatId: number,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const isReservableSeat = manager
+      ? await this.concertRepository.isReservableSeat(seatId, seatId, manager)
+      : await this.concertRepository.isReservableSeat(sessionId, seatId);
+
+    return isReservableSeat;
   }
 
-  async saveReservationInfo(sessionId: number, seatId: number, userId: number) {
-    return await this.concertRepository.saveReservationInfo(
-      sessionId,
-      seatId,
-      userId,
-    );
+  async saveReservationInfo(
+    sessionId: number,
+    seatId: number,
+    userId: number,
+    manager?: EntityManager,
+  ) {
+    return manager
+      ? await this.concertRepository.saveReservationInfo(
+          sessionId,
+          seatId,
+          userId,
+          manager,
+        )
+      : await this.concertRepository.saveReservationInfo(
+          sessionId,
+          seatId,
+          userId,
+        );
   }
 
-  async updateSeatStatus(sessionId: number, seatId: number) {
-    return await this.concertRepository.updateSeatStatus(sessionId, seatId);
+  async updateSeatStatus(
+    sessionId: number,
+    seatId: number,
+    manager?: EntityManager,
+  ): Promise<void> {
+    await (manager
+      ? this.concertRepository.updateSeatStatus(sessionId, seatId, manager)
+      : this.concertRepository.updateSeatStatus(sessionId, seatId));
   }
 
-  getReservationById(reservationId: number) {
-    throw new Error('Method not implemented.');
+  async getReservationById(reservationId: number, manager?: EntityManager) {
+    return (await manager)
+      ? this.concertRepository.getReservationById(reservationId, manager)
+      : this.concertRepository.getReservationById(reservationId);
   }
 }

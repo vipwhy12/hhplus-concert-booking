@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Headers } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { WaitingQueuesService } from 'src/domain/waiting-queue/waiting.queue.service';
+import { WaitingQueueResDto } from './dto/waiting.queue.res.dto';
 import {
   ApiAddToWaitingQueue,
   ApiGetWaitingQueue,
-} from 'src/common/swagger/custom-api';
-import { WaitingQueuesService } from 'src/domain/waiting-queue/waiting.queue.service';
-import { WaitingQueueResDto } from './dto/waiting.queue.res.dto';
+} from 'src/common/docs/waiting.queue.document';
 
 @ApiTags('Waiting Queues')
 @Controller('waiting-queues')

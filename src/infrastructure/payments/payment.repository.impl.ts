@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentsRepository } from 'src/domain/payments/payments.repository';
 import { Injectable } from '@nestjs/common';
@@ -13,8 +13,15 @@ export class PaymentRepositoryImpl implements PaymentsRepository {
     private readonly pointRepository: Repository<Point>,
   ) {}
 
-  async getPointByUserId(userId: number): Promise<Payment> {
-    const point = await this.pointRepository.findOne({ where: { userId } });
+  async getPointByUserId(
+    userId: number,
+    manager: EntityManager,
+  ): Promise<Payment> {
+    const repository = manager
+      ? manager.getRepository(Point)
+      : this.pointRepository;
+
+    const point = await repository.findOne({ where: { userId } });
     return PaymentMapper.toDomain(point);
   }
 

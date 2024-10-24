@@ -1,6 +1,6 @@
 import { DocumentBuilder } from '@nestjs/swagger';
 
-export class apiDocument {
+export class ApiDocument {
   public initializeOptions() {
     return new DocumentBuilder()
       .setTitle('콘서트 예약 서비스')
