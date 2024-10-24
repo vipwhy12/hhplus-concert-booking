@@ -12,4 +12,7 @@ export class SessionEntity {
 
   @Column()
   date: Date;
+
+  @Column()
+  avaliableSeats: number;
 }

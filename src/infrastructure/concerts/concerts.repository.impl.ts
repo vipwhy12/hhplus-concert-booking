@@ -5,11 +5,14 @@ import { SeatEntity } from 'src/common/entity/seat.entity';
 import { SessionEntity } from 'src/common/entity/session.entity';
 import { ReservationStatus } from 'src/common/enums/reserve.status';
 import { SeatStatus } from 'src/common/enums/seat.status';
-import { ReservationsRepository } from 'src/domain/reservations/reservation.repository';
+import { ConcertRepository } from 'src/domain/concerts/concerts.repository';
+import { ConcertMapper } from 'src/domain/concerts/mapper/concert.mapper';
+import { Concert } from 'src/domain/concerts/model/concert';
+
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class ReservationRepositoryImpl implements ReservationsRepository {
+export class ConcertRepositoryImple implements ConcertRepository {
   constructor(
     @InjectRepository(SessionEntity)
     private readonly sessionRepository: Repository<SessionEntity>,
@@ -19,15 +22,12 @@ export class ReservationRepositoryImpl implements ReservationsRepository {
     private readonly reservationRepository: Repository<ReservationEntity>,
   ) {}
 
-  async getAvailableSessions(
-    concertId: number,
-    date: Date,
-  ): Promise<SessionEntity[]> {
+  async getAvailableSessions(concertId: number): Promise<Concert[]> {
     const availableSessions = await this.sessionRepository.find({
-      where: { concertId, date },
+      where: { concertId },
     });
 
-    return availableSessions;
+    return ConcertMapper.toDomainList(availableSessions);
   }
 
   async getAvailableSeats(sessionId: number): Promise<SeatEntity[]> {

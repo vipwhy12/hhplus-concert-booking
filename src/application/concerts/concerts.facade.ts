@@ -1,11 +1,11 @@
 import { AuthService } from 'src/domain/auth/auth.service';
 import { Injectable } from '@nestjs/common';
-import { ReservationsService } from 'src/domain/reservations/reservation.service';
+import { ConcertsService } from 'src/domain/concerts/concerts.service';
 
 @Injectable()
 export class ConcertsFacade {
   constructor(
-    private readonly reservationsService: ReservationsService,
+    private readonly concertService: ConcertsService,
     private readonly authService: AuthService,
   ) {}
 
@@ -13,13 +13,13 @@ export class ConcertsFacade {
   //TODO: 트랙잭션 처리
   async reserveSeat(seatId: number, sessionId: number, userId: number) {
     //3-1 특정 좌석 예약 가능 여부 확인
-    await this.reservationsService.isReservableSeat(sessionId, seatId);
+    await this.concertService.isReservableSeat(sessionId, seatId);
 
     //3-2 예약이 가능하다면, 좌석 상태 변경
-    await this.reservationsService.updateSeatStatus(sessionId, seatId);
+    await this.concertService.updateSeatStatus(sessionId, seatId);
 
     //3-3 예약 정보 저장
-    const reservation = await this.reservationsService.saveReservationInfo(
+    const reservation = await this.concertService.saveReservationInfo(
       sessionId,
       seatId,
       userId,
